@@ -142,6 +142,82 @@ namespace backend_app.Controllers
             }
         }
 
+
+
+
+
+
+        [HttpGet]
+        [Route("GetHODCount")]
+        public int GetHODCount()
+        {
+            int hodCnt = 0; // Initialize incidentCnt to 0
+
+            try
+            {
+
+                using (SqlCommand cmd = new SqlCommand("usp_HodCount", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    conn.Open();
+                    // Use ExecuteScalar to retrieve a single value
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        // If the result is not null or DBNull, convert it to int
+                        hodCnt = Convert.ToInt32(result);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle exception appropriately (logging, error response, etc.)
+                Console.WriteLine("Error fetching incident count: " + ex.Message);
+                throw; // Re-throw the exception
+            }
+
+            return hodCnt;
+        }
+
+
+
+        [HttpGet]
+        [Route("GetEmpCount")]
+        public int GetEmpCount()
+        {
+            int empCnt = 0; // Initialize incidentCnt to 0
+
+            try
+            {
+
+                using (SqlCommand cmd = new SqlCommand("usp_EmpCount", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    conn.Open();
+                    // Use ExecuteScalar to retrieve a single value
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        // If the result is not null or DBNull, convert it to int
+                        empCnt = Convert.ToInt32(result);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle exception appropriately (logging, error response, etc.)
+                Console.WriteLine("Error fetching incident count: " + ex.Message);
+                throw; // Re-throw the exception
+            }
+
+            return empCnt;
+        }
+
+
     }
 
 

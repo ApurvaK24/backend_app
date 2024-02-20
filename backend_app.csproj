@@ -182,6 +182,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AccidentByMonth.cs" />
     <Compile Include="Models\AccidentFormData.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\IncidentFormData.cs" />
