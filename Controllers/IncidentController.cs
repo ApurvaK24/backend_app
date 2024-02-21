@@ -126,5 +126,49 @@ namespace backend_app.Controllers
 
             return incidentCnt;
         }
+
+
+
+        [HttpGet]
+        [Route("GetMonthlyIncidentCounts")]
+        public IHttpActionResult GetMonthlyAccidentCounts()
+        {
+            List<MonthlyIncidentCount> monthlyCounts = new List<MonthlyIncidentCount>();
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["conn"].ConnectionString))
+                {
+                    conn.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("usp_IncMonthCount", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                MonthlyIncidentCount monthlyCount = new MonthlyIncidentCount
+                                {
+                                    Month = reader.GetInt32(0),
+                                    MonthName = reader.GetString(1),
+                                    IncidentCount = reader.GetInt32(2)
+                                };
+                                monthlyCounts.Add(monthlyCount);
+                            }
+                        }
+                    }
+                }
+
+                return Ok(monthlyCounts);
+            }
+            catch (Exception ex)
+            {
+                // Handle exception appropriately (logging, error response, etc.)
+                Console.WriteLine("Error fetching monthly accident counts: " + ex.Message);
+                return InternalServerError();
+            }
+        }
     }
 }

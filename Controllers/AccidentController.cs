@@ -66,31 +66,7 @@ namespace backend_app.Controllers
             return msg;
         }
 
-        /* [HttpGet]
-         [Route("GetAccidentCount")]
-         public int GetAccidentCount()
-         {
-             int AccidentCnt;
-             try
-             {
-
-                 cmd = new SqlCommand("usp_GetAccidentCount", conn)
-                 {
-                     CommandType = CommandType.StoredProcedure
-                 };
-
-                 conn.Open();
-                 AccidentCnt = cmd.ExecuteNonQuery();
-                 conn.Close();
-
-             }
-             catch (Exception ex)
-             {
-                throw ex;
-             }
-
-             return AccidentCnt;
-         }*/
+       
 
         [HttpGet]
         [Route("GetAccidentCount")]
@@ -129,11 +105,15 @@ namespace backend_app.Controllers
 
 
 
+
+
+
+
         [HttpGet]
-        [Route("GetAccidentCountsByMonth")]
-        public IHttpActionResult GetAccidentCountsByMonth()
+        [Route("GetMonthlyAccidentCounts")]
+        public IHttpActionResult GetMonthlyAccidentCounts()
         {
-            List<AccidentByMonth> accidentCounts = new List<AccidentByMonth>();
+            List<MonthlyAccidentCount> monthlyCounts = new List<MonthlyAccidentCount>();
 
             try
             {
@@ -141,48 +121,40 @@ namespace backend_app.Controllers
                 {
                     conn.Open();
 
-                    string query = @"
-                    SELECT
-                        MONTH(DateOfAccident) AS Month,
-                        DATENAME(MONTH, DateOfAccident) AS MonthName,
-                        SUM(CASE WHEN AccidentCauses = 'I' THEN 1 ELSE 0 END) AS I,
-                        SUM(CASE WHEN AccidentCauses = 'A' THEN 1 ELSE 0 END) AS A
-                    FROM
-                        AccidentReports
-                    GROUP BY
-                        MONTH(DateOfAccident),
-                        DATENAME(MONTH, DateOfAccident)
-                    ORDER BY
-                        MONTH(DateOfAccident);";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlCommand cmd = new SqlCommand("usp_MonthCount", conn))
                     {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                AccidentByMonth accident = new AccidentByMonth
+                                MonthlyAccidentCount monthlyCount = new MonthlyAccidentCount
                                 {
                                     Month = reader.GetInt32(0),
                                     MonthName = reader.GetString(1),
-                                    I = reader.GetInt32(2),
-                                    A = reader.GetInt32(3)
+                                    AccidentCount = reader.GetInt32(2)
                                 };
-                                accidentCounts.Add(accident);
+                                monthlyCounts.Add(monthlyCount);
                             }
                         }
                     }
                 }
 
-                return Ok(accidentCounts);
+                return Ok(monthlyCounts);
             }
             catch (Exception ex)
             {
                 // Handle exception appropriately (logging, error response, etc.)
-                Console.WriteLine("Error fetching accident counts by month: " + ex.Message);
+                Console.WriteLine("Error fetching monthly accident counts: " + ex.Message);
                 return InternalServerError();
             }
         }
+
+
+
+
+
     }
 
 
