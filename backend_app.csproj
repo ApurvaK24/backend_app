@@ -175,6 +175,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccidentController.cs" />
+    <Compile Include="Controllers\CountDetailsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IncidentController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -183,6 +184,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccidentFormData.cs" />
+    <Compile Include="Models\CountDetail.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\IncidentFormData.cs" />
     <Compile Include="Models\MonthlyAccidentCount.cs" />
